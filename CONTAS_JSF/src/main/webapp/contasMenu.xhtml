@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<ui:composition template="/WEB-INF/templates/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+        <ui:define name="centro">
+    
+
+    
+      <h1>Cadastro de Contas</h1>
+      
+      		<h:form id="frm">
+	
+			<p:toolbar>
+				<f:facet name="left">
+					<p:commandButton value="Add Conta" icon="ui-icon-document"
+						action="#{ContaController.addConta}"
+						process="@this" update="conta-dialog"
+						oncomplete="PF('novaContaDialog').show()" />
+					
+					<span class="ui-separator">
+						<span class="ui-icon ui-icon-grip-dotted-vertical" />
+            		</span>
+            		
+            		<p:commandButton icon="ui-icon-pencil" title="Editar" />
+            		
+            		<p:commandButton icon="ui-icon-trash" title="Excluir" />
+            		
+            		<p:commandButton icon="ui-icon-arrowthick-1-s" title="Exportar para XLS" />
+				</f:facet>
+			</p:toolbar>
+	
+			<p:dataTable value="#{ContaController.contas}" var="pContas"
+					emptyMessage="Nenhuma Conta cadastrada!" rows="10" 
+					paginator="true" paginatorPosition="bottom"
+					style="margin-top: 10px" id="conta-table">
+					
+				<p:column headerText="Descrição" sortBy="#{pContas.descricao}">
+					<h:outputText value="#{pContas.descricao}" />
+				</p:column>
+				<p:column headerText="Parcela(s)" width="60">
+					<h:outputText value="#{pContas.parcela}" />
+				</p:column>
+				<p:column headerText="Valor da Conta" width="80">
+					<h:outputText value="#{pContas.valor}" />
+				</p:column>
+				<p:column headerText="Data da Conta" width="50">
+					<h:outputText value="#{pContas.data}" />
+				</p:column>
+			</p:dataTable>
+      
+      <p:dialog header="Inserir Conta" widgetVar="novaContaDialog" id="conta-dialog"
+					resizable="false" closeOnEscape="true">
+				<h:panelGrid columns="2" id="painel-dialog">
+				
+					<p:outputLabel value="Descrição" for="descricao" />
+					<p:inputText id="descricao" size="80" maxlength="100" 
+						value="#{ContaController.contaNova.descricao}" />
+					
+					<p:outputLabel value="Valor da Conta" for="valor" />
+					<p:inputText id="valor" size="40" maxlength="60"
+						value="#{ContaController.contaNova.valor}" />
+					
+					<p:outputLabel value="Parcela(s)" for="parcela" />
+					<p:inputText id="parcela" size="50" maxlength="50"
+						value="#{ContaController.contaNova.parcela}" />
+					
+					<p:outputLabel value="Data da Conta" for="data-conta" />
+					<p:inputText id="data-conta" size="10" maxlength="10"
+						value="#{ContaController.contaNova.data}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</p:inputText>
+					
+					<p:outputLabel/>
+					<p:commandButton value="Salvar" id="salvar-button"
+						action="#{ContaController.guardarConta}"
+						process="conta-dialog" update="conta-table"
+						oncomplete="PF('novaContaDialog').hide()" />
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+      
+	</ui:define>
+</ui:composition>
